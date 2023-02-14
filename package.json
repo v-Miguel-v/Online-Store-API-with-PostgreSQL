@@ -3,29 +3,12 @@
   "version": "1.0.0",
   "description": "Una simple API REST de una tiendita online usando PostgreSQL diseñada como resultado del \"Curso de Backend con Node.js: Base de Datos con PostgreSQL\" de Platzi.",
   "main": "index.js",
-  "scripts": {
-    "dev": "nodemon -L index.js",
-    "start": "node index.js",
-    "lint": "eslint"
+  "dependencies": {
+    "@hapi/boom": "^10.0.0",
+    "cors": "^2.8.5",
+    "express": "^4.18.2",
+    "joi": "^17.7.0"
   },
-  "repository": {
-    "type": "git",
-    "url": ""
-  },
-  "keywords": [
-    "api-rest",
-    "nodejs",
-    "expressjs",
-    "postgresql",
-    "platzi-course",
-    "backend"
-  ],
-  "author": "Miguel Velásquez <vmiguel.xy@gmail.com>",
-  "license": "MIT",
-  "bugs": {
-    "url": ""
-  },
-  "homepage": "",
   "devDependencies": {
     "eslint": "^8.25.0",
     "eslint-config-prettier": "^8.5.0",
@@ -33,10 +16,25 @@
     "nodemon": "^2.0.20",
     "prettier": "^2.7.1"
   },
-  "dependencies": {
-    "@hapi/boom": "^10.0.0",
-    "cors": "^2.8.5",
-    "express": "^4.18.2",
-    "joi": "^17.7.0"
-  }
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/v-Miguel-v/Online-Store-API-with-PostgreSQL.git"
+  },
+  "keywords": [
+    "nodejs",
+    "expressjs",
+    "postgresql",
+    "platzi-course",
+    "backend",
+    "api-rest"
+  ],
+  "author": "Miguel Velásquez <vmiguel.xy@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/v-Miguel-v/Online-Store-API-with-PostgreSQL/issues"
+  },
+  "homepage": "https://github.com/v-Miguel-v/Online-Store-API-with-PostgreSQL#readme"
 }
