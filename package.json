@@ -1,7 +1,7 @@
 {
-  "name": "online-store-api",
+  "name": "online-store-api-with-postgresql",
   "version": "1.0.0",
-  "description": "Una simple API de una tiendita online diseñada como resultado del \"Curso de Backend con Node.js: API REST con Express.js\" de Platzi.",
+  "description": "Una simple API REST de una tiendita online usando PostgreSQL diseñada como resultado del \"Curso de Backend con Node.js: Base de Datos con PostgreSQL\" de Platzi.",
   "main": "index.js",
   "scripts": {
     "dev": "nodemon -L index.js",
@@ -10,21 +10,22 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/v-Miguel-v/Online-Store.git"
+    "url": ""
   },
   "keywords": [
     "api-rest",
     "nodejs",
     "expressjs",
+    "postgresql",
     "platzi-course",
     "backend"
   ],
   "author": "Miguel Velásquez <vmiguel.xy@gmail.com>",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/v-Miguel-v/Online-Store/issues"
+    "url": ""
   },
-  "homepage": "https://github.com/v-Miguel-v/Online-Store#readme",
+  "homepage": "",
   "devDependencies": {
     "eslint": "^8.25.0",
     "eslint-config-prettier": "^8.5.0",
