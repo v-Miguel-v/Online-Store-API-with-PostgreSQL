@@ -27,7 +27,7 @@ function getMainPage(request, response) {
 	const homeUrl = `${currentProtocol}://${request.get("host")}`;
 	
 	response.send(`
-		<h1>Servidor de Prueba</h1>
+		<h1>Servidor de Prueba de la Online-Store-API-with-PostgreSQL</h1>
 		<p>El servidor se ha creado satisfactoriamente usando <i>express</i>.</p>
 		<p>Justo ahora no estás en ninguna ruta en concreto, te encuentras en <b>la página principal</b>.</p>
 		<p>Enlace a la documentación: <a href="https://github.com/v-Miguel-v/Online-Store-API#readme">Documentación de la API</a></p>
