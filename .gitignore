@@ -1,3 +1,6 @@
+# Postgres Volumes for Docker Service
+postgreSQL_db
+
 # Logs
 logs
 *.log
