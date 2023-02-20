@@ -4,10 +4,20 @@ services:
   psql:
     image: 'postgres:13'
     environment:
-      - POSTGRES_DB=my_store
+      - POSTGRES_DB=vmiguel
       - POSTGRES_USER=vmiguel
       - POSTGRES_PASSWORD=admin
     ports:
       - '5432:5432'
     volumes:
       - './postgreSQL_db:/var/lib/postgresql/data'
+  
+
+
+  pgad:
+    image: 'dpage/pgadmin4'
+    environment:
+      - PGADMIN_DEFAULT_EMAIL=admin@email.com
+      - PGADMIN_DEFAULT_PASSWORD=admin
+    ports:
+      - 5050:80
