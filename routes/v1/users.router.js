@@ -8,6 +8,17 @@ const express = require("express");
 const validationHandler = require("../../middlewares/validation.handler");
 	const { fullValidationSchema, simpleValidationSchema, idValidationSchema } = require("../../schemas/users.schema");
 
+// Connect to Database
+router.get("/database", getDatabaseData); // ./Users/database
+async function getDatabaseData(request, response, errorHandlers) {
+	try {
+		const databaseData = await service.connectToDatabase();
+		response.status(200).json(databaseData);
+	} catch (error) {
+		errorHandlers(error);
+	}
+}
+
 // GET Requests
 router.get("/", getUsers); // ./Users
 async function getUsers(request, response, errorHandlers) {

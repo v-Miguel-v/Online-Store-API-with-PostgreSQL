@@ -1,3 +1,4 @@
+const getConnection = require("../libs/postgres");
 const DATA = require("../data/users.data");
 const boom = require("@hapi/boom");
 
@@ -5,7 +6,19 @@ class UsersService {
 	constructor(){
 		this.users = DATA;
 	}
-	
+
+	connectToDatabase(){
+		return new Promise(async (resolve, reject) => {
+			try {
+				const client = await getConnection();
+				const data = await client.query('SELECT * FROM tasks');
+				resolve(data.rows);
+			} catch (error) {
+				reject(error);
+			}
+		});
+	}
+
 	getAll(){
 		return new Promise((resolve, reject) => {
 			try {
@@ -15,11 +28,11 @@ class UsersService {
 			}
 		});
 	}
-	
+
 	search(givenId){
 		return new Promise((resolve, reject) => {
 			try {
-				const userFound = this.users.find(user => user.id === givenId);				
+				const userFound = this.users.find(user => user.id === givenId);
 				if (!userFound) {
 					throw boom.notFound("No se encontró al usuario especificado.");
 				} else {
@@ -30,7 +43,7 @@ class UsersService {
 			}
 		});
 	}
-	
+
 	create(givenUser){
 		return new Promise((resolve, reject) => {
 			try {
@@ -52,7 +65,7 @@ class UsersService {
 			}
 		});
 	}
-	
+
 	delete(givenId){
 		return new Promise(async (resolve, reject) => {
 			try {
@@ -66,7 +79,7 @@ class UsersService {
 			}
 		});
 	}
-	
+
 	update(givenId, givenUpdate){
 		return new Promise(async (resolve, reject) => {
 			try {
