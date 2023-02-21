@@ -1,17 +1,18 @@
-const getConnection = require("../libs/postgres");
+const connectionPool = require("../libs/postgres.pool");
 const DATA = require("../data/users.data");
 const boom = require("@hapi/boom");
 
 class UsersService {
 	constructor(){
 		this.users = DATA;
+		this.connectionPool = connectionPool;
 	}
 
 	connectToDatabase(){
 		return new Promise(async (resolve, reject) => {
 			try {
-				const client = await getConnection();
-				const data = await client.query('SELECT * FROM tasks');
+				const params = "SELECT * FROM tasks";
+				const data = await this.connectionPool.query(params);
 				resolve(data.rows);
 			} catch (error) {
 				reject(error);

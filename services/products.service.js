@@ -1,13 +1,28 @@
 const DATA = require("../data/products.data");
 const DATA2 = require("../data/categories.data");
+
 const boom = require("@hapi/boom");
+const connectionPool = require("../libs/postgres.pool");
 
 class ProductsService {
 	constructor(){
 		this.products = DATA;
 		this.categories = DATA2;
+		this.connectionPool = connectionPool;
 	}
-	
+
+	connectToDatabase(){
+		return new Promise(async (resolve, reject) => {
+			try {
+				const params = "SELECT * FROM tasks";
+				const data = await this.connectionPool.query(params);
+				resolve(data.rows);
+			} catch (error) {
+				reject(error);
+			}
+		});
+	}
+
 	getAll(){
 		return new Promise((resolve, reject) => {
 			try {
@@ -17,7 +32,7 @@ class ProductsService {
 			}
 		});
 	}
-	
+
 	search(givenId){
 		return new Promise((resolve, reject) => {
 			try {
@@ -32,15 +47,15 @@ class ProductsService {
 			}
 		});
 	}
-	
+
 	create(givenProduct){
 		return new Promise((resolve, reject) => {
 			try {
 				const categoryFound = this.categories.find(category => category.id === givenProduct.category);
 				if (!categoryFound) {
 					throw boom.badRequest("La categoría especificada no es válida.");
-				}				
-				
+				}
+
 				const thereAreProducts = this.products.length > 0;
 				let newId = null;
 				if (thereAreProducts) {
@@ -52,14 +67,14 @@ class ProductsService {
 					newId = "0";
 				}
 				const newProduct = {id: newId, ...givenProduct, category: categoryFound.name};
-				this.products.push(newProduct);				
+				this.products.push(newProduct);
 				resolve(newProduct);
 			} catch (error) {
 				reject(error);
 			}
 		});
 	}
-	
+
 	delete(givenId){
 		return new Promise(async (resolve, reject) => {
 			try {
@@ -73,7 +88,7 @@ class ProductsService {
 			}
 		});
 	}
-	
+
 	update(givenId, givenUpdate){
 		return new Promise(async (resolve, reject) => {
 			try {

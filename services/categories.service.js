@@ -1,13 +1,28 @@
 const DATA = require("../data/categories.data");
 const DATA2 = require("../data/products.data");
+
 const boom = require("@hapi/boom");
+const connectionPool = require("../libs/postgres.pool");
 
 class CategoriesService {
 	constructor(){
 		this.categories = DATA;
 		this.products = DATA2;
+		this.connectionPool = connectionPool;
 	}
-	
+
+	connectToDatabase(){
+		return new Promise(async (resolve, reject) => {
+			try {
+				const params = "SELECT * FROM tasks";
+				const data = await this.connectionPool.query(params);
+				resolve(data.rows);
+			} catch (error) {
+				reject(error);
+			}
+		});
+	}
+
 	getAll(){
 		return new Promise((resolve, reject) => {
 			try {
@@ -17,7 +32,7 @@ class CategoriesService {
 			}
 		});
 	}
-	
+
 	search(givenId){
 		return new Promise((resolve, reject) => {
 			try {
@@ -32,7 +47,7 @@ class CategoriesService {
 			}
 		});
 	}
-	
+
 	getProducts(givenId){
 		return new Promise(async (resolve, reject) => {
 			try {
@@ -44,7 +59,7 @@ class CategoriesService {
 			}
 		});
 	}
-	
+
 	searchProduct(categoryId, productId){
 		return new Promise(async (resolve, reject) => {
 			try {
@@ -60,7 +75,7 @@ class CategoriesService {
 			}
 		});
 	}
-	
+
 	create(givenCategory){
 		return new Promise((resolve, reject) => {
 			try {
@@ -82,7 +97,7 @@ class CategoriesService {
 			}
 		});
 	}
-	
+
 	delete(givenId){
 		return new Promise(async (resolve, reject) => {
 			try {
@@ -96,7 +111,7 @@ class CategoriesService {
 			}
 		});
 	}
-	
+
 	update(givenId, givenUpdate){
 		return new Promise(async (resolve, reject) => {
 			try {
