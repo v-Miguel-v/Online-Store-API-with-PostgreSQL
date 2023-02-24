@@ -1,19 +1,18 @@
-const connectionPool = require("../libs/postgres.pool");
+const sequelize = require("../libs/sequelize");
 const DATA = require("../data/users.data");
 const boom = require("@hapi/boom");
 
 class UsersService {
 	constructor(){
 		this.users = DATA;
-		this.connectionPool = connectionPool;
 	}
 
 	connectToDatabase(){
 		return new Promise(async (resolve, reject) => {
 			try {
 				const params = "SELECT * FROM tasks";
-				const data = await this.connectionPool.query(params);
-				resolve(data.rows);
+				const [data] = await sequelize.query(params);
+				resolve(data);
 			} catch (error) {
 				reject(error);
 			}
