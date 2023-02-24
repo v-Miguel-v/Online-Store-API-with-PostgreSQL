@@ -7,11 +7,22 @@ class UsersService {
 		this.users = DATA;
 	}
 
-	connectToDatabase(){
+	connectToDatabase1(){
 		return new Promise(async (resolve, reject) => {
 			try {
 				const params = "SELECT * FROM tasks";
 				const [data] = await sequelize.query(params);
+				resolve(data);
+			} catch (error) {
+				reject(error);
+			}
+		});
+	}
+
+	connectToDatabase2(){
+		return new Promise(async (resolve, reject) => {
+			try {
+				const data = await sequelize.models.User.findAll();
 				resolve(data);
 			} catch (error) {
 				reject(error);

@@ -40,12 +40,12 @@ console.groupEnd("Categories:");
 */
 
 const categories = [
-	{id:"0",name:"Clothing"},
-	{id:"1",name:"Sports"},
-	{id:"2",name:"Cleaning"},
-	{id:"3",name:"Appliances"},
-	{id:"4",name:"Furniture"},
-	{id:"5",name:"Random"}
+	{id:"1",name:"Clothing"},
+	{id:"2",name:"Sports"},
+	{id:"3",name:"Cleaning"},
+	{id:"4",name:"Appliances"},
+	{id:"5",name:"Furniture"},
+	{id:"6",name:"Random"}
 ];
 
 console.group("Categories:");
