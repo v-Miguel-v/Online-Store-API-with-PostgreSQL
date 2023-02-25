@@ -1,42 +1,12 @@
-const DATA = require("../data/categories.data");
-const DATA2 = require("../data/products.data");
-
 const boom = require("@hapi/boom");
 const sequelize = require("../libs/sequelize");
 
 class CategoriesService {
-	constructor(){
-		this.categories = DATA;
-		this.products = DATA2;
-	}
-
-	connectToDatabase1(){
-		return new Promise(async (resolve, reject) => {
-			try {
-				const params = "SELECT * FROM tasks";
-				const [data] = await sequelize.query(params);
-				resolve(data);
-			} catch (error) {
-				reject(error);
-			}
-		});
-	}
-
-	connectToDatabase2(){
-		return new Promise(async (resolve, reject) => {
-			try {
-				const data = await sequelize.models.Category.findAll();
-				resolve(data);
-			} catch (error) {
-				reject(error);
-			}
-		});
-	}
-
 	getAll(){
-		return new Promise((resolve, reject) => {
+		return new Promise(async (resolve, reject) => {
 			try {
-				resolve(this.categories);
+				const allCategories = await sequelize.models.Category.findAll();
+				resolve(allCategories);
 			} catch (error) {
 				reject(error);
 			}
@@ -44,9 +14,9 @@ class CategoriesService {
 	}
 
 	search(givenId){
-		return new Promise((resolve, reject) => {
+		return new Promise(async (resolve, reject) => {
 			try {
-				const categoryFound = this.categories.find(category => category.id === givenId);
+				const categoryFound = await sequelize.models.Category.findByPk(Number(givenId));
 				if (!categoryFound) {
 					throw boom.notFound("No se encontró la categoría especificada.");
 				} else {
@@ -62,7 +32,8 @@ class CategoriesService {
 		return new Promise(async (resolve, reject) => {
 			try {
 				const category = await this.search(givenId);
-				const categoryProducts = this.products.filter(product => product.category === category.name);
+				const allProducts = await sequelize.models.Product.findAll();
+				const categoryProducts = allProducts.filter(product => product.category === category.name);
 				resolve(categoryProducts);
 			} catch (error) {
 				reject(error);
@@ -74,7 +45,7 @@ class CategoriesService {
 		return new Promise(async (resolve, reject) => {
 			try {
 				const categoryProducts = await this.getProducts(categoryId);
-				const productFound = categoryProducts.find(product => product.id === productId);
+				const productFound = categoryProducts.find(product => product.id === Number(productId));
 				if (!productFound) {
 					throw boom.notFound("No se encontró el producto especificado.");
 				} else {
@@ -87,20 +58,9 @@ class CategoriesService {
 	}
 
 	create(givenCategory){
-		return new Promise((resolve, reject) => {
+		return new Promise(async (resolve, reject) => {
 			try {
-				const thereAreCategories = this.categories.length > 0;
-				let newId = null;
-				if (thereAreCategories) {
-					const lastIndex = this.categories.length - 1;
-					const lastId = Number(this.categories[lastIndex].id);
-					newId = String(lastId+1);
-				}
-				if (!thereAreCategories) {
-					newId = "0";
-				}
-				const newCategory = {id: newId, ...givenCategory};
-				this.categories.push(newCategory);
+				const newCategory = await sequelize.models.Category.create(givenCategory);
 				resolve(newCategory);
 			} catch (error) {
 				reject(error);
@@ -111,10 +71,9 @@ class CategoriesService {
 	delete(givenId){
 		return new Promise(async (resolve, reject) => {
 			try {
-				await this.search(givenId);
-				const index = this.categories.findIndex(category => category.id === givenId);
-				const deletedCategory = this.categories[index];
-				this.categories.splice(index, 1);
+				const categoryToDelete = await this.search(givenId);
+				await categoryToDelete.destroy();
+				const deletedCategory = categoryToDelete;
 				resolve(deletedCategory);
 			} catch (error) {
 				reject(error);
@@ -125,11 +84,8 @@ class CategoriesService {
 	update(givenId, givenUpdate){
 		return new Promise(async (resolve, reject) => {
 			try {
-				await this.search(givenId);
-				const category = this.categories.find(category => category.id === givenId);
-				const index = this.categories.findIndex(category => category.id === givenId);
-				this.categories[index] = { ...category, ...givenUpdate };
-				const updatedCategory = this.categories[index];
+				const categoryToUpdate = await this.search(givenId);
+				const updatedCategory = categoryToUpdate.update(givenUpdate);
 				resolve(updatedCategory);
 			} catch (error) {
 				reject(error);

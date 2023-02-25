@@ -15,7 +15,20 @@ function boomErrorHandler(error, request, response, nextErrorHandler) {
 	}
 }
 
-function serverErrorHandler(error, request, response, nextErrorHandler) {
+function sequelizeErrorHandler(error, request, response, nextErrorHandler) {
+	if (error.name.includes("Sequelize")) {
+		console.log("Sequelize Error Handler");
+		response.status(404).json({
+			status: 404,
+			error: "Bad Request",
+			message: `${error.errors[0].message}. ${error.parent.detail}`
+		});
+	} else {
+		nextErrorHandler(error);
+	}
+}
+
+function serverDefaultErrorHandler(error, request, response, nextErrorHandler) {
 	console.log("Server Error Handler");
 	response.status(error.statusCode || 500).json({
 		status: error.statusCode || 500,
@@ -24,4 +37,4 @@ function serverErrorHandler(error, request, response, nextErrorHandler) {
 	});
 }
 
-module.exports = { logErrors, boomErrorHandler, serverErrorHandler };
+module.exports = { logErrors, boomErrorHandler, sequelizeErrorHandler, serverDefaultErrorHandler };

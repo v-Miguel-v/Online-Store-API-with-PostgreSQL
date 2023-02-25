@@ -1,42 +1,12 @@
-const DATA = require("../data/products.data");
-const DATA2 = require("../data/categories.data");
-
 const boom = require("@hapi/boom");
 const sequelize = require("../libs/sequelize");
 
 class ProductsService {
-	constructor(){
-		this.products = DATA;
-		this.categories = DATA2;
-	}
-
-	connectToDatabase1(){
-		return new Promise(async (resolve, reject) => {
-			try {
-				const params = "SELECT * FROM tasks";
-				const [data] = await sequelize.query(params);
-				resolve(data);
-			} catch (error) {
-				reject(error);
-			}
-		});
-	}
-
-	connectToDatabase2(){
-		return new Promise(async (resolve, reject) => {
-			try {
-				const data = await sequelize.models.Product.findAll();
-				resolve(data);
-			} catch (error) {
-				reject(error);
-			}
-		});
-	}
-
 	getAll(){
-		return new Promise((resolve, reject) => {
+		return new Promise(async (resolve, reject) => {
 			try {
-				resolve(this.products);
+				const allProducts = await sequelize.models.Product.findAll();
+				resolve(allProducts);
 			} catch (error) {
 				reject(error);
 			}
@@ -44,9 +14,9 @@ class ProductsService {
 	}
 
 	search(givenId){
-		return new Promise((resolve, reject) => {
+		return new Promise(async (resolve, reject) => {
 			try {
-				const productFound = this.products.find(product => product.id === givenId);
+				const productFound = await sequelize.models.Product.findByPk(Number(givenId));
 				if (!productFound) {
 					throw boom.notFound("No se encontró el producto especificado.");
 				} else {
@@ -59,25 +29,14 @@ class ProductsService {
 	}
 
 	create(givenProduct){
-		return new Promise((resolve, reject) => {
+		return new Promise(async (resolve, reject) => {
 			try {
-				const categoryFound = this.categories.find(category => category.id === givenProduct.category);
+				const allCategories = await sequelize.models.Category.findAll();
+				const categoryFound = allCategories.find(category => category.name === givenProduct.category);
 				if (!categoryFound) {
 					throw boom.badRequest("La categoría especificada no es válida.");
 				}
-
-				const thereAreProducts = this.products.length > 0;
-				let newId = null;
-				if (thereAreProducts) {
-					const lastIndex = this.products.length - 1;
-					const lastId = Number(this.products[lastIndex].id);
-					newId = String(lastId+1);
-				}
-				if (!thereAreProducts) {
-					newId = "0";
-				}
-				const newProduct = {id: newId, ...givenProduct, category: categoryFound.name};
-				this.products.push(newProduct);
+				const newProduct = await sequelize.models.Product.create(givenProduct);
 				resolve(newProduct);
 			} catch (error) {
 				reject(error);
@@ -88,10 +47,9 @@ class ProductsService {
 	delete(givenId){
 		return new Promise(async (resolve, reject) => {
 			try {
-				await this.search(givenId);
-				const index = this.products.findIndex(product => product.id === givenId);
-				const deletedProduct = this.products[index];
-				this.products.splice(index, 1);
+				const productToDelete = await this.search(givenId);
+				await productToDelete.destroy();
+				const deletedProduct = productToDelete;
 				resolve(deletedProduct);
 			} catch (error) {
 				reject(error);
@@ -102,11 +60,8 @@ class ProductsService {
 	update(givenId, givenUpdate){
 		return new Promise(async (resolve, reject) => {
 			try {
-				await this.search(givenId);
-				const product = this.products.find(product => product.id === givenId);
-				const index = this.products.findIndex(product => product.id === givenId);
-				this.products[index] = { ...product, ...givenUpdate };
-				const updatedProduct = this.products[index];
+				const produtcToUpdate = await this.search(givenId);
+				const updatedProduct = produtcToUpdate.update(givenUpdate);
 				resolve(updatedProduct);
 			} catch (error) {
 				reject(error);

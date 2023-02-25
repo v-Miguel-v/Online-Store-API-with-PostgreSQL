@@ -1,5 +1,5 @@
 /* Initial & Global Values */
-const { logErrors, boomErrorHandler, serverErrorHandler } = require("./middlewares/error.handler");
+const { logErrors, boomErrorHandler, sequelizeErrorHandler, serverDefaultErrorHandler } = require("./middlewares/error.handler");
 const currentProtocol = process.env.PROTOCOL || "http";
 const port = process.env.PORT || 3000;
 const routerApi = require("./routes");
@@ -18,14 +18,15 @@ app.listen(port, () => { console.log(`El servidor está corriendo en el puerto $
 /* Middlewares & Handlers */
 app.use(logErrors);
 app.use(boomErrorHandler);
-app.use(serverErrorHandler);
+app.use(sequelizeErrorHandler);
+app.use(serverDefaultErrorHandler);
 
 /* Pages */
 // Main Page
 app.get("/", getMainPage);
 function getMainPage(request, response) {
 	const homeUrl = `${currentProtocol}://${request.get("host")}`;
-	
+
 	response.send(`
 		<h1>Servidor de Prueba de la Online-Store-API-with-PostgreSQL</h1>
 		<p>El servidor se ha creado satisfactoriamente usando <i>express</i>.</p>
@@ -43,13 +44,13 @@ function getMainPage(request, response) {
 }
 
 // Example Route
-app.get("/example-route", getExampleRoutePage); 
+app.get("/example-route", getExampleRoutePage);
 function getExampleRoutePage(request, response) {
 	const homeUrl = `${currentProtocol}://${request.get("host")}`;
-	
+
 	response.send(`
 		<h1>Servidor de Prueba</h1>
 		<p>Ahora te encuentras en <b>la ruta de ejemplo</b>.</p>
 		<p><a href="${homeUrl}">Regresar a la Página Principal</a></p>
-	`);	
+	`);
 }

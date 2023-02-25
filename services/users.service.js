@@ -1,39 +1,12 @@
-const sequelize = require("../libs/sequelize");
-const DATA = require("../data/users.data");
 const boom = require("@hapi/boom");
+const sequelize = require("../libs/sequelize");
 
 class UsersService {
-	constructor(){
-		this.users = DATA;
-	}
-
-	connectToDatabase1(){
-		return new Promise(async (resolve, reject) => {
-			try {
-				const params = "SELECT * FROM tasks";
-				const [data] = await sequelize.query(params);
-				resolve(data);
-			} catch (error) {
-				reject(error);
-			}
-		});
-	}
-
-	connectToDatabase2(){
-		return new Promise(async (resolve, reject) => {
-			try {
-				const data = await sequelize.models.User.findAll();
-				resolve(data);
-			} catch (error) {
-				reject(error);
-			}
-		});
-	}
-
 	getAll(){
-		return new Promise((resolve, reject) => {
+		return new Promise(async (resolve, reject) => {
 			try {
-				resolve(this.users);
+				const allUsers = await sequelize.models.User.findAll();
+				resolve(allUsers);
 			} catch (error) {
 				reject(error);
 			}
@@ -41,9 +14,9 @@ class UsersService {
 	}
 
 	search(givenId){
-		return new Promise((resolve, reject) => {
+		return new Promise(async (resolve, reject) => {
 			try {
-				const userFound = this.users.find(user => user.id === givenId);
+				const userFound = await sequelize.models.User.findByPk(Number(givenId));
 				if (!userFound) {
 					throw boom.notFound("No se encontró al usuario especificado.");
 				} else {
@@ -56,20 +29,9 @@ class UsersService {
 	}
 
 	create(givenUser){
-		return new Promise((resolve, reject) => {
+		return new Promise(async (resolve, reject) => {
 			try {
-				const thereAreUsers = this.users.length > 0;
-				let newId = null;
-				if (thereAreUsers) {
-					const lastIndex = this.users.length - 1;
-					const lastId = Number(this.users[lastIndex].id);
-					newId = String(lastId+1);
-				}
-				if (!thereAreUsers) {
-					newId = "0";
-				}
-				const newUser = {id: newId, ...givenUser};
-				this.users.push(newUser);
+				const newUser = await sequelize.models.User.create(givenUser);
 				resolve(newUser);
 			} catch (error) {
 				reject(error);
@@ -80,10 +42,9 @@ class UsersService {
 	delete(givenId){
 		return new Promise(async (resolve, reject) => {
 			try {
-				await this.search(givenId);
-				const index = this.users.findIndex(user => user.id === givenId);
-				const deletedUser = this.users[index];
-				this.users.splice(index, 1);
+				const userToDelete = await this.search(givenId);
+				await userToDelete.destroy();
+				const deletedUser = userToDelete;
 				resolve(deletedUser);
 			} catch (error) {
 				reject(error);
@@ -94,11 +55,8 @@ class UsersService {
 	update(givenId, givenUpdate){
 		return new Promise(async (resolve, reject) => {
 			try {
-				await this.search(givenId);
-				const user = this.users.find(user => user.id === givenId);
-				const index = this.users.findIndex(user => user.id === givenId);
-				this.users[index] = { ...user, ...givenUpdate };
-				const updatedUser = this.users[index];
+				const userToUpdate = await this.search(givenId);
+				const updatedUser = userToUpdate.update(givenUpdate);
 				resolve(updatedUser);
 			} catch (error) {
 				reject(error);
