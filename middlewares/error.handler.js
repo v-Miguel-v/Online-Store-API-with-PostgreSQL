@@ -1,3 +1,5 @@
+const { ValidationError } = require("sequelize");
+
 function logErrors(error, request, response, nextErrorHandler) {
 	console.group("Log Errors:");
 		console.error(error);
@@ -16,11 +18,11 @@ function boomErrorHandler(error, request, response, nextErrorHandler) {
 }
 
 function sequelizeErrorHandler(error, request, response, nextErrorHandler) {
-	if (error.name.includes("Sequelize")) {
+	if (error instanceof ValidationError) {
 		console.log("Sequelize Error Handler");
-		response.status(404).json({
-			status: 404,
-			error: "Bad Request",
+		response.status(409).json({
+			status: 409,
+			error: "Conflict",
 			message: `${error.errors[0].message}. ${error.parent.detail}`
 		});
 	} else {
