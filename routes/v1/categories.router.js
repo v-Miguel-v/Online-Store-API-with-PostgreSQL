@@ -12,7 +12,7 @@ const validationHandler = require("../../middlewares/validation.handler");
 router.get("/database", getDatabaseData); // ./Categories/database
 async function getDatabaseData(request, response, errorHandlers) {
 	try {
-		const databaseData = await service.connectToDatabase();
+		const databaseData = await service.connectToDatabase2();
 		response.status(200).json(databaseData);
 	} catch (error) {
 		errorHandlers(error);
