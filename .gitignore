@@ -1,5 +1,6 @@
-# Postgres Volumes for Docker Service
+# Postgres and MySQL Volumes for Docker Services
 postgreSQL_db
+mySQL_db
 
 # Logs
 logs

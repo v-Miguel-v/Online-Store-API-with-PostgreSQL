@@ -23,7 +23,7 @@ function sequelizeErrorHandler(error, request, response, nextErrorHandler) {
 		response.status(409).json({
 			status: 409,
 			error: "Conflict",
-			message: `${error.errors[0].message}. ${error.parent.detail}`
+			message: `${error.parent.sqlMessage}, ${error.errors[0].message}.`
 		});
 	} else {
 		nextErrorHandler(error);
