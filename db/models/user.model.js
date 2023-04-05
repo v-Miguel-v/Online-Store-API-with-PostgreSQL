@@ -16,6 +16,11 @@ const UserSchema = {
 	age: {
 		allowNull: false,
 		type: DataTypes.INTEGER
+	},
+	role: {
+		allowNull: false,
+		type: DataTypes.STRING,
+		defaultValue: "customer"
 	}
 }
 
