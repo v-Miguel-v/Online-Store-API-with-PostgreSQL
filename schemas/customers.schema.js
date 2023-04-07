@@ -2,19 +2,22 @@ const Joi = require("joi");
 
 const id = Joi.string().alphanum().min(1);
 const name = Joi.string().min(2);
-const age = Joi.number().integer().positive();
-const role = Joi.string().min(1);
+const lastName = Joi.string().min(2);
+const phoneNumber = Joi.string().min(11).max(11).pattern(/^\d+$/);
+const userId = Joi.string().alphanum().min(1);
 
 const fullValidationSchema = Joi.object({
 	name: name.required(),
-	age: age.required(),
-	role: role.required()
+	lastName: lastName.required(),
+	phoneNumber: phoneNumber.required(),
+	userId: userId.required()
 });
 
 const simpleValidationSchema = Joi.object({
 	name: name,
-	age: age,
-	role: role
+	lastName: lastName,
+	phoneNumber: phoneNumber,
+	userId: userId
 });
 
 const idValidationSchema = Joi.object({
