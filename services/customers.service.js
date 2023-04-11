@@ -5,7 +5,7 @@ class CustomersService {
 	getAll(){
 		return new Promise(async (resolve, reject) => {
 			try {
-				const allCustomers = await sequelize.models.Customer.findAll();
+				const allCustomers = await sequelize.models.Customer.findAll({include: ["user"]});
 				resolve(allCustomers);
 			} catch (error) {
 				reject(error);
@@ -31,7 +31,7 @@ class CustomersService {
 	create(givenCustomer){
 		return new Promise(async (resolve, reject) => {
 			try {
-				const newCustomer = await sequelize.models.Customer.create(givenCustomer);
+				const newCustomer = await sequelize.models.Customer.create(givenCustomer, {include: ["user"]});
 				resolve(newCustomer);
 			} catch (error) {
 				reject(error);

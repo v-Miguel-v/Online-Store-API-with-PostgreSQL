@@ -5,7 +5,7 @@ class UsersService {
 	getAll(){
 		return new Promise(async (resolve, reject) => {
 			try {
-				const allUsers = await sequelize.models.User.findAll();
+				const allUsers = await sequelize.models.User.findAll({include: ["customer"]});
 				resolve(allUsers);
 			} catch (error) {
 				reject(error);

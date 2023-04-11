@@ -4,13 +4,22 @@ const id = Joi.string().alphanum().min(1);
 const name = Joi.string().min(2);
 const lastName = Joi.string().min(2);
 const phoneNumber = Joi.string().min(11).max(11).pattern(/^\d+$/);
+
 const userId = Joi.string().alphanum().min(1);
+const userName = Joi.string().min(2);
+const userAge = Joi.number().integer().positive();
+const userRole = Joi.string().min(1);
+
 
 const fullValidationSchema = Joi.object({
 	name: name.required(),
 	lastName: lastName.required(),
 	phoneNumber: phoneNumber.required(),
-	userId: userId.required()
+	user: Joi.object({
+		name: userName.required(),
+		age: userAge.required(),
+		role: userRole.required()
+	})
 });
 
 const simpleValidationSchema = Joi.object({

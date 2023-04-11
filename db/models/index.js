@@ -11,6 +11,7 @@ function setupModels(sequelize) {
 	Category.init(CategorySchema, Category.config(sequelize));
 
 	// Associations
+	User.associate(sequelize.models);
 	Customer.associate(sequelize.models);
 }
 
