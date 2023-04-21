@@ -20,7 +20,9 @@ class CategoriesService {
 				if (!categoryFound) {
 					throw boom.notFound("No se encontró la categoría especificada.");
 				} else {
-					resolve(categoryFound);
+					const categoryProducts = await sequelize.models.Product.findAll({where:{category: categoryFound.name}});
+					const categoryWithProducts = { ...categoryFound.toJSON(), products: categoryProducts.map(x => x.toJSON()) };
+					resolve(categoryWithProducts);
 				}
 			} catch (error) {
 				reject(error);

@@ -32,7 +32,7 @@ class ProductsService {
 		return new Promise(async (resolve, reject) => {
 			try {
 				const allCategories = await sequelize.models.Category.findAll();
-				const categoryFound = allCategories.find(category => category.name === givenProduct.categoryId);
+				const categoryFound = allCategories.find(category => category.name === givenProduct.category);
 				if (!categoryFound) {
 					throw boom.badRequest("La categoría especificada no es válida.");
 				}
