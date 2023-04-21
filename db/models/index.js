@@ -12,7 +12,9 @@ function setupModels(sequelize) {
 
 	// Associations
 	User.associate(sequelize.models);
+	Product.associate(sequelize.models);
 	Customer.associate(sequelize.models);
+	Category.associate(sequelize.models);
 }
 
 module.exports = setupModels;
