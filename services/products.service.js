@@ -60,8 +60,8 @@ class ProductsService {
 	update(givenId, givenUpdate){
 		return new Promise(async (resolve, reject) => {
 			try {
-				const produtcToUpdate = await this.search(givenId);
-				const updatedProduct = produtcToUpdate.update(givenUpdate);
+				const productToUpdate = await this.search(givenId);
+				const updatedProduct = productToUpdate.update(givenUpdate);
 				resolve(updatedProduct);
 			} catch (error) {
 				reject(error);
