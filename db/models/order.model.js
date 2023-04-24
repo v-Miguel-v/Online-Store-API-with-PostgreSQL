@@ -25,12 +25,29 @@ const OrderSchema = {
 		allowNull: false,
 		type: DataTypes.DATE,
 		defaultValue: Sequelize.NOW
+	},
+	total: {
+		type: DataTypes.VIRTUAL,
+		get() {
+			if (this.products.length > 0) {
+				return this.products.reduce( (total, product) => {
+					return total + (product.price * product.OrderProduct.amount);
+				}, 0);
+			}
+			return 0;
+		}
 	}
 }
 
 class Order extends Model {
 	static associate(models) {
 		this.belongsTo(models.Customer, {as: "customer"});
+		this.belongsToMany(models.Product, {
+			as: "products",
+			through: models.OrderProduct,
+			foreignKey: "orderId",
+			otherKey: "productId"
+		})
 	}
 
 	static config(sequelize) {

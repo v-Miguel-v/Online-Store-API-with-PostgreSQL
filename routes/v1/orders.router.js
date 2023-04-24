@@ -6,7 +6,7 @@ const express = require("express");
 	const router = express.Router();
 
 const validationHandler = require("../../middlewares/validation.handler");
-	const { creationSchema, fullValidationSchema, simpleValidationSchema, idValidationSchema } = require("../../schemas/orders.schema");
+	const { creationSchema, fullValidationSchema, simpleValidationSchema, idValidationSchema, addProductToAnOrderSchema } = require("../../schemas/orders.schema");
 
 // GET Requests
 router.get("/", getOrders); // ./Orders
@@ -38,6 +38,18 @@ async function createOrder(request, response, errorHandlers) {
 		const givenOrder = request.body;
 		const newOrder = await service.create(givenOrder);
 		response.status(201).json({massage: "La orden se creó correctamente.", orderCreated: newOrder});
+	} catch (error) {
+		errorHandlers(error);
+	}
+}
+
+router.post("/add-product", validationHandler(addProductToAnOrderSchema, "body"), createOrder); // ./Orders/add-product
+async function createOrder(request, response, errorHandlers) {
+	try {
+		const productToAdd = request.body;
+		const productAdded = await service.addProduct(productToAdd);
+		const orderUpdated = await service.search(request.body.orderId);
+		response.status(201).json({message: "El producto se añadió correctamente.", productAdded, orderUpdated});
 	} catch (error) {
 		errorHandlers(error);
 	}

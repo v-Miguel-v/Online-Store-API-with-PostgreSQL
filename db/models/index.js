@@ -3,6 +3,7 @@ const { Product, ProductSchema } = require("./product.model");
 const { Customer, CustomerSchema } = require("./customer.model");
 const { Category, CategorySchema } = require("./category.model");
 const { Order, OrderSchema } = require("./order.model");
+const { OrderProduct, OrderProductSchema } = require("./jointable-order-product.model");
 
 function setupModels(sequelize) {
 	// Initilizations
@@ -11,6 +12,7 @@ function setupModels(sequelize) {
 	Customer.init(CustomerSchema, Customer.config(sequelize));
 	Category.init(CategorySchema, Category.config(sequelize));
 	Order.init(OrderSchema, Order.config(sequelize));
+	OrderProduct.init(OrderProductSchema, OrderProduct.config(sequelize));
 
 	// Associations
 	User.associate(sequelize.models);

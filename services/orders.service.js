@@ -5,7 +5,7 @@ class OrdersService {
 	getAll(){
 		return new Promise(async (resolve, reject) => {
 			try {
-				const allOrders = await sequelize.models.Order.findAll({include: ["customer"]});
+				const allOrders = await sequelize.models.Order.findAll({include: ["customer", "products"]});
 				resolve(allOrders);
 			} catch (error) {
 				reject(error);
@@ -16,7 +16,7 @@ class OrdersService {
 	search(givenId){
 		return new Promise(async (resolve, reject) => {
 			try {
-				const orderFound = await sequelize.models.Order.findByPk(Number(givenId), {include: ["customer"]});
+				const orderFound = await sequelize.models.Order.findByPk(Number(givenId), {include: ["customer", "products"]});
 				if (!orderFound) {
 					throw boom.notFound("No se encontró la orden especificada.");
 				} else {
@@ -62,6 +62,17 @@ class OrdersService {
 				reject(error);
 			}
 		});
+	}
+
+	addProduct(productToAdd){
+		return new Promise(async (resolve, reject) => {
+			try {
+				const productAdded = await sequelize.models.OrderProduct.create(productToAdd);
+				resolve(productAdded);
+			} catch (error) {
+				reject(error);
+			}
+		})
 	}
 }
 
