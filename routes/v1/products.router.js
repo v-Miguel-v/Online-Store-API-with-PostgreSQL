@@ -6,13 +6,13 @@ const express = require("express");
 	const router = express.Router();
 
 const validationHandler = require("../../middlewares/validation.handler");
-	const { fullValidationSchema, simpleValidationSchema, idValidationSchema } = require("../../schemas/products.schema");
+	const { fullValidationSchema, simpleValidationSchema, idValidationSchema, queryPaginationSchema } = require("../../schemas/products.schema");
 
 // GET Requests
-router.get("/", getProducts); // ./Products
+router.get("/", validationHandler(queryPaginationSchema, "query"), getProducts); // ./Products
 async function getProducts(request, response, errorHandlers) {
 	try {
-		const allProducts = await service.getAll();
+		const allProducts = await service.getAll(request.query);
 		response.status(200).json(allProducts);
 	} catch (error) {
 		errorHandlers(error);

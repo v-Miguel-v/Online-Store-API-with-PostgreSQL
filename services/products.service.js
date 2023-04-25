@@ -2,10 +2,17 @@ const boom = require("@hapi/boom");
 const sequelize = require("../libs/sequelize");
 
 class ProductsService {
-	getAll(){
+	definePagination(values){
+		const { limit, offset } = values;
+		if (limit && offset) { return { limit, offset } }
+		return {};
+	}
+
+	getAll(query){
 		return new Promise(async (resolve, reject) => {
 			try {
-				const allProducts = await sequelize.models.Product.findAll();
+				const pagination = this.definePagination(query);
+				const allProducts = await sequelize.models.Product.findAll(pagination);
 				resolve(allProducts);
 			} catch (error) {
 				reject(error);

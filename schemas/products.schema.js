@@ -5,6 +5,9 @@ const name = Joi.string().min(2);
 const price = Joi.number().positive();
 const category = Joi.string().min(1);
 
+const limit = Joi.number().min(1);
+const offset = Joi.number().min(0);
+
 const fullValidationSchema = Joi.object({
 	name: name.required(),
 	price: price.required(),
@@ -21,4 +24,9 @@ const idValidationSchema = Joi.object({
 	id: id.required()
 });
 
-module.exports = { fullValidationSchema, simpleValidationSchema, idValidationSchema };
+const queryPaginationSchema = Joi.object({
+	limit,
+	offset
+});
+
+module.exports = { fullValidationSchema, simpleValidationSchema, idValidationSchema, queryPaginationSchema };
