@@ -1,18 +1,30 @@
 const boom = require("@hapi/boom");
+const { Op } = require("sequelize");
 const sequelize = require("../libs/sequelize");
 
 class ProductsService {
-	definePagination(values){
-		const { limit, offset } = values;
-		if (limit && offset) { return { limit, offset } }
-		return {};
+	defineOptions(values){
+		const options = { where: {} };
+		const { limit, offset, price_min, price_max } = values;
+
+		if (limit && offset) { options.limit = limit, options.offset = offset }
+		if (price_min) { options.where.price = { [Op.gte]: price_min } }
+		if (price_max) { options.where.price = { [Op.lte]: price_max } }
+		if (price_min && price_max) {
+			options.where.price = {
+				[Op.gte]: price_min,
+				[Op.lte]: price_max
+			}
+		}
+
+		return options;
 	}
 
 	getAll(query){
 		return new Promise(async (resolve, reject) => {
 			try {
-				const pagination = this.definePagination(query);
-				const allProducts = await sequelize.models.Product.findAll(pagination);
+				const options = this.defineOptions(query);
+				const allProducts = await sequelize.models.Product.findAll(options);
 				resolve(allProducts);
 			} catch (error) {
 				reject(error);
