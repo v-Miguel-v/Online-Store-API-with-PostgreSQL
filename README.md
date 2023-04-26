@@ -2,7 +2,7 @@
 Una simple API REST de una tiendita online usando PostgreSQL diseñada como resultado del "[Curso de Backend con Node.js: Base de Datos con PostgreSQL](https://platzi.com/cursos/backend-nodejs-postgres/)" de Platzi.
 
 ### 📝 Documentación 📝
-La URL Base para consumir la API REST es la siguiente: (aún no disponible)
+La URL Base para consumir la API REST es la siguiente: https://online-store-api-with-postgresql-production.up.railway.app/
 
 Toda la documentación aquí descrita solo es válida para la **versión 1** de la API REST, por tanto, es necesario agregar un "/api/v1/" después de la url base anterior para poder hacer uso de los Endpoints.
 
